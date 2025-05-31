@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Eliminar paciente</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f8fa;
+            color: #333;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 40px 50px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        h2 {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: #555;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        button[type="submit"] {
+            background-color: #e74c3c;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+            padding: 12px 0;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #c0392b;
+        }
+
+        .button-link {
+            text-decoration: none;
+            color: #2980b9;
+            font-weight: bold;
+            font-size: 1.1rem;
+            padding: 10px 15px;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            background-color: #ecf0f1;
+            max-width: 300px;
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+
+        .button-link:hover {
+            background-color: #3498db;
+            color: white;
+            border-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>¿Eliminar paciente?</h2>
+        <p>{{ paciente.primer_nombre }} {{ paciente.primer_apellido }}</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit">Sí, eliminar</button>
+        </form>
+        <a href="{% url 'lista_pacientes' %}" class="button-link">Cancelar</a>
+        <a href="{% url 'home' %}" class="button-link">Ir al Inicio</a>
+    </div>
+</body>
+</html>

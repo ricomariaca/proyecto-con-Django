@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% if paciente %}Editar{% else %}Crear{% endif %} paciente</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f8fa;
+            color: #333;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 40px 50px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        h2 {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 30px;
+        }
+
+        form {
+            text-align: left;
+        }
+
+        form p {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 6px;
+            color: #34495e;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #2980b9;
+            outline: none;
+        }
+
+        button[type="submit"] {
+            background-color: #2980b9;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+            padding: 12px 0;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #3498db;
+        }
+
+        .button-link {
+            text-decoration: none;
+            color: #2980b9;
+            font-weight: bold;
+            font-size: 1.1rem;
+            padding: 10px 15px;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            background-color: #ecf0f1;
+            max-width: 300px;
+            width: 100%;
+            text-align: center;
+            margin-top: 25px;
+            box-sizing: border-box;
+        }
+
+        .button-link:hover {
+            background-color: #3498db;
+            color: white;
+            border-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>{% if paciente %}Editar{% else %}Crear{% endif %} paciente</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Guardar</button>
+        </form>
+
+        <a href="{% url 'lista_pacientes' %}" class="button-link">Volver</a>
+        <a href="{% url 'home' %}" class="button-link">Ir al Inicio</a>
+    </div>
+</body>
+</html>

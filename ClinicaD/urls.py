@@ -1,8 +1,7 @@
 from django.contrib import admin
-from django.urls import path
-from clinicaApp.views import *
+from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home)
+    path('', include('clinicaApp.urls')),  # 👈 Solo incluye el archivo de la app
 ]

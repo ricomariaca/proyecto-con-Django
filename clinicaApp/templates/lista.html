@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Contactos de Salud</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f8fa;
+            color: #2c3e50;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .container {
+            margin-top: 40px;
+            background-color: #fff;
+            padding: 30px 50px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 700px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .botones-superiores {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .botones-superiores a {
+            display: inline-block;
+            margin: 0 10px;
+            text-decoration: none;
+            padding: 10px 20px;
+            background-color: #ecf0f1;
+            color: #2980b9;
+            font-weight: bold;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .botones-superiores a:hover {
+            background-color: #3498db;
+            color: white;
+            border-color: #2980b9;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #ecf0f1;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+        }
+
+        .acciones {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .acciones a {
+            text-decoration: none;
+            color: #2980b9;
+            font-weight: bold;
+            border: 2px solid transparent;
+            border-radius: 6px;
+            padding: 5px 12px;
+            background-color: #dfe6e9;
+            transition: all 0.3s ease;
+        }
+
+        .acciones a:hover {
+            background-color: #3498db;
+            color: white;
+            border-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Lista de Contactos de Salud</h1>
+
+        <div class="botones-superiores">
+            <a href="{% url 'crear_contacto' %}">➕ Crear nuevo</a>
+            <a href="{% url 'home' %}">🏠 Ir al Inicio</a>
+        </div>
+
+        <ul>
+            {% for contacto in contactos %}
+                <li>
+                    <strong>Paciente:</strong> {{ contacto.paciente }}<br>
+                    <strong>Fecha:</strong> {{ contacto.fecha_atencion|date:"j \\d\\e F \\d\\e Y \\a \\l\\a\\s H:i" }}<br>
+                    <strong>Motivo:</strong> {{ contacto.motivo_atencion }}
+                    <div class="acciones">
+                        <a href="{% url 'editar_contacto' contacto.pk %}">Editar</a>
+                        <a href="{% url 'eliminar_contacto' contacto.pk %}">Eliminar</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

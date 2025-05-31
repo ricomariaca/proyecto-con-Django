@@ -1,130 +1,189 @@
 from django.db import models
 
-# 1. Pacientes
+
+class Pais(models.Model):
+    id_pais = models.CharField(primary_key=True, max_length=15)
+    nombre = models.CharField(max_length=100)
+
+class Ocupacion(models.Model):
+    id_ocupacion = models.CharField(primary_key=True, max_length=15)
+    descripcion = models.CharField(max_length=100)
+    id_padre = models.ForeignKey('self', null=True, blank=True, on_delete=models.DO_NOTHING)
+    def __str__(self):
+        return f"{self.id_ocupacion} {self.descripcion or ''}".strip()
+
+class Ciudad(models.Model):
+    id_ciudad = models.CharField(primary_key=True, max_length=15)
+    nombre = models.CharField(max_length=100)
+    codigo_dane = models.CharField(max_length=15)
+
+    def __str__(self):
+        return f"{self.codigo_dane} {self.nombre or ''}".strip()
+
+class Discapacidad(models.Model):
+    id_discapacidad = models.CharField(primary_key=True, max_length=15)
+    descripcion = models.CharField(max_length=100)
+
+class Etnia(models.Model):
+    id_etnia = models.CharField(primary_key=True, max_length=15)
+    descripcion = models.CharField(max_length=50)
+
+    def __str__(self):
+        return f"{self.id_etnia} {self.descripcion or ''}".strip()
+
+class EntidadAdministradora(models.Model):
+    codigo_eapb = models.CharField(primary_key=True, max_length=15)
+    nombre = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"{self.codigo_eapb} {self.nombre or ''}".strip()
+
+class ModalidadAtencion(models.Model):
+    id_modalidad = models.CharField(primary_key=True, max_length=15)
+    descripcion = models.CharField(max_length=100)
+    def __str__(self):
+        return f"{self.id_modalidad} {self.descripcion or ''}".strip()
+
+class ViaIngreso(models.Model):
+    id_via = models.CharField(primary_key=True, max_length=15)
+    descripcion = models.CharField(max_length=100)
+    def __str__(self):
+        return f"{self.id_via} {self.descripcion or ''}".strip()
+
+class PrioridadAtencion(models.Model):
+    id_prioridad = models.CharField(primary_key=True, max_length=15)
+    descripcion = models.CharField(max_length=100)
+    def __str__(self):
+        return f"{self.id_prioridad} {self.descripcion or ''}".strip()
+
+class DocumentoIdentidad(models.Model):
+    tipo_documento_codigo = models.CharField(primary_key=True, max_length=15)
+    nombre_doc = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"{self.tipo_documento_codigo} {self.nombre_doc or ''}".strip()
+
+
+
+
+# PACIENTE Y RELACIONES
+
+
 class Paciente(models.Model):
-    TIPO_SEXO = [('M', 'Masculino'), ('F', 'Femenino'), ('O', 'Otro')]
+    SEXO_CHOICES = [
+        ('M', 'Hombre'),
+        ('F', 'Mujer'),
+        ('I', 'Intersexual'),
 
-    tipo_identificacion = models.CharField(max_length=10)
-    numero_identificacion = models.CharField(max_length=20, unique=True)
-    nombres = models.CharField(max_length=100)
-    apellidos = models.CharField(max_length=100)
-    fecha_nacimiento = models.DateField()
-    sexo = models.CharField(max_length=1, choices=TIPO_SEXO)
-    telefono = models.CharField(max_length=15, blank=True, null=True)
-    direccion = models.TextField(blank=True, null=True)
-    correo_electronico = models.EmailField(max_length=100, blank=True, null=True)
+    ]
 
-    def __str__(self):
-        return f"{self.nombres} {self.apellidos}"
+    GENERO_CHOICES = [
+        ('H', 'Masculino'),
+        ('M', 'Femenino'),
+        ('T', 'Transgenero'),
+        ('N', 'Neutro'),
+        ('NA', 'No lo declara'),
+    ]
 
-
-# 2. Profesionales
-class Profesional(models.Model):
-    tipo_identificacion = models.CharField(max_length=10)
-    numero_identificacion = models.CharField(max_length=20, unique=True)
-    nombres = models.CharField(max_length=100)
-    apellidos = models.CharField(max_length=100)
-    especialidad = models.CharField(max_length=100)
-    numero_registro = models.CharField(max_length=50, unique=True)
-
-    def __str__(self):
-        return f"{self.nombres} {self.apellidos} - {self.especialidad}"
-
-
-# 4. Diagnósticos
-class Diagnostico(models.Model):
-    codigo_cie10 = models.CharField(max_length=10)
-    descripcion = models.TextField()
-
-    def __str__(self):
-        return f"{self.codigo_cie10} - {self.descripcion}"
+    Municipio = [
+        ('05440', '05440 - Marinilla'),
+        ('05376', '05376 - La Ceja'),
+        ('05318', '05318 - Guarne'),
+        ('05313', '05313 - Granada'),
+        ('05002', '05002 - Abejorral'),
+        ('05021', '05021 - Alejandría'),
+        ('05055', '05055 - Argelia'),
+        ('05148', '05148 - Carmen De Viboral'),
+        ('05197', '05197 - Cocorná'),
+        ('05206', '05206 - Concepción'),
+        ('05321', '05321 - Guatape'),
+        ('05400', '05400 - La Unión'),
+    ]
 
 
-# 6. Medicamentos
-class Medicamento(models.Model):
-    nombre_comercial = models.CharField(max_length=100)
-    principio_activo = models.CharField(max_length=100)
-    presentacion = models.CharField(max_length=100, blank=True, null=True)
-
-    def __str__(self):
-        return self.nombre_comercial
-
-
-# 8. Procedimientos
-class Procedimiento(models.Model):
-    codigo_cups = models.CharField(max_length=10)
-    descripcion = models.TextField()
+    primer_nombre = models.CharField(max_length=50)
+    segundo_nombre = models.CharField(max_length=50, null=True, blank=True)
+    primer_apellido = models.CharField(max_length=50)
+    segundo_apellido = models.CharField(max_length=50, null=True, blank=True)
+    tipo_documento = models.ForeignKey(DocumentoIdentidad, on_delete=models.DO_NOTHING)
+    numero_doc = models.CharField(max_length=20)
+    sexo = models.CharField(max_length=15, choices=SEXO_CHOICES)
+    genero = models.CharField(max_length=15, choices=GENERO_CHOICES)
+    fecha_nacimiento = models.CharField(max_length=20)
+    hora_nacimiento = models.CharField(max_length=20)
+    ciudad_residencia = models.ForeignKey(Ciudad, on_delete=models.DO_NOTHING)
+    id_ocupacion = models.ForeignKey(Ocupacion, on_delete=models.DO_NOTHING)
+    id_etnia = models.ForeignKey(Etnia, on_delete=models.DO_NOTHING)
+    Municipio = models.CharField(max_length=15, choices=Municipio)
+    codigo_eapb = models.ForeignKey(EntidadAdministradora, on_delete=models.DO_NOTHING)
 
     def __str__(self):
-        return f"{self.codigo_cups} - {self.descripcion}"
+        return f"{self.primer_nombre} {self.segundo_nombre or ''} {self.primer_apellido} {self.segundo_apellido or ''}".strip()
 
-
-# 11. Vacunas
-class Vacuna(models.Model):
-    nombre_vacuna = models.CharField(max_length=100)
-    fabricante = models.CharField(max_length=100, blank=True, null=True)
-    lote = models.CharField(max_length=50, blank=True, null=True)
-
-    def __str__(self):
-        return self.nombre_vacuna
-
-
-# 3. Consultas
-class Consulta(models.Model):
-    paciente = models.ForeignKey(Paciente, on_delete=models.SET_NULL, null=True, blank=True)
-    profesional = models.ForeignKey(Profesional, on_delete=models.SET_NULL, null=True, blank=True)
-    fecha_consulta = models.DateTimeField(auto_now_add=True)
-    motivo_consulta = models.TextField()
-    diagnostico = models.TextField(blank=True, null=True)
-    notas = models.TextField(blank=True, null=True)
-
-    def __str__(self):
-        return f"Consulta de {self.paciente} - {self.fecha_consulta.date()}"
-
-
-# 5. Diagnósticos por Consulta
-class ConsultaDiagnostico(models.Model):
-    consulta = models.ForeignKey(Consulta, on_delete=models.SET_NULL, null=True, blank=True)
-    diagnostico = models.ForeignKey(Diagnostico, on_delete=models.SET_NULL, null=True, blank=True)
+class NacionalidadPaciente(models.Model):
+    paciente = models.ForeignKey(Paciente, on_delete=models.DO_NOTHING)
+    pais = models.ForeignKey(Pais, on_delete=models.DO_NOTHING)
 
     class Meta:
-        unique_together = ('consulta', 'diagnostico')
+        unique_together = ('paciente', 'pais')
 
-
-# 7. Recetas Médicas
-class Receta(models.Model):
-    consulta = models.ForeignKey(Consulta, on_delete=models.SET_NULL, null=True, blank=True)
-    medicamento = models.ForeignKey(Medicamento, on_delete=models.SET_NULL, null=True, blank=True)
-    dosis = models.CharField(max_length=50)
-    frecuencia = models.CharField(max_length=50)
-    duracion = models.CharField(max_length=50)
-
-
-# 9. Procedimientos por Consulta
-class ConsultaProcedimiento(models.Model):
-    consulta = models.ForeignKey(Consulta, on_delete=models.SET_NULL, null=True, blank=True)
-    procedimiento = models.ForeignKey(Procedimiento, on_delete=models.SET_NULL, null=True, blank=True)
+class PacienteDiscapacidad(models.Model):
+    paciente = models.ForeignKey(Paciente, on_delete=models.DO_NOTHING)
+    discapacidad = models.ForeignKey(Discapacidad, on_delete=models.DO_NOTHING)
 
     class Meta:
-        unique_together = ('consulta', 'procedimiento')
+        unique_together = ('paciente', 'discapacidad')
+
+class VoluntadAnticipada(models.Model):
+    paciente = models.ForeignKey(Paciente, on_delete=models.DO_NOTHING)
+    documento_url = models.TextField()
+    fecha_registro = models.DateTimeField()
+    se_opone = models.CharField(max_length=15, null=True, blank=True)
+
+class PresuncionDonacion(models.Model):
+    paciente = models.ForeignKey(Paciente, on_delete=models.DO_NOTHING)
+    se_opone = models.CharField(max_length=15, null=True, blank=True)
+    fecha_registro = models.DateField()
+
+# ======================
+# DIAGNÓSTICO Y CONTACTO
+# ======================
+
+class DiagnosticoCIE10(models.Model):
+    codigo = models.CharField(primary_key=True, max_length=15)
+    descripcion = models.CharField(max_length=255)
+    codigo_padre = models.ForeignKey('self', null=True, blank=True, on_delete=models.DO_NOTHING)
+    def __str__(self):
+        return f"{self.codigo} {self.descripcion or ''}".strip()
 
 
-# 10. Signos Vitales
-class SignoVital(models.Model):
-    consulta = models.ForeignKey(Consulta, on_delete=models.SET_NULL, null=True, blank=True)
-    presion_arterial = models.CharField(max_length=10, blank=True, null=True)
-    frecuencia_cardiaca = models.IntegerField(blank=True, null=True)
-    temperatura = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
-    saturacion_oxigeno = models.IntegerField(blank=True, null=True)
-    peso = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
-    talla = models.DecimalField(max_digits=4, decimal_places=2, blank=True, null=True)
+class ContactoSalud(models.Model):
+    Tiraje_CHOICES = [
+        ('I', 'Tiraje I'),
+        ('II', 'Tiraje II'),
+        ('III', 'Tiraje III'),
+        ('IV', 'Tiraje IV'),
+        ('V', 'Tiraje V'),
+    ]
+
+    Entorno_CHOICES = [
+        ('1', 'Hogar'),
+        ('2', 'Comunitario'),
+        ('3', 'Escolar'),
+        ('4', 'Laboral'),
+        ('5', 'Institucional'),
+    ]
 
 
-# 12. Vacunas aplicadas
-class PacienteVacuna(models.Model):
-    paciente = models.ForeignKey(Paciente, on_delete=models.SET_NULL, null=True, blank=True)
-    vacuna = models.ForeignKey(Vacuna, on_delete=models.SET_NULL, null=True, blank=True)
-    fecha_aplicacion = models.DateField()
 
-    class Meta:
-        unique_together = ('paciente', 'vacuna', 'fecha_aplicacion')
+    paciente = models.ForeignKey(Paciente, on_delete=models.DO_NOTHING)
+    fecha_atencion = models.DateTimeField()
+    id_modalidad = models.ForeignKey(ModalidadAtencion, on_delete=models.DO_NOTHING)
+    id_via = models.ForeignKey(ViaIngreso, on_delete=models.DO_NOTHING)
+    id_prioridad = models.ForeignKey(PrioridadAtencion, on_delete=models.DO_NOTHING)
+    motivo_atencion = models.TextField()
+    entorno = models.CharField(max_length=20, choices=Entorno_CHOICES)
+    fecha_hora_triage = models.CharField(max_length=20)
+    clasificacion_triage = models.CharField(max_length=20, choices=Tiraje_CHOICES)
+    diagnostico_cie10 = models.ForeignKey(DiagnosticoCIE10, on_delete=models.DO_NOTHING)
+    codigo_eapb = models.ForeignKey(EntidadAdministradora, on_delete=models.DO_NOTHING)

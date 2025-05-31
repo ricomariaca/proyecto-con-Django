@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <title>Eliminar Contacto</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f8fa;
+            color: #2c3e50;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        p {
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        .botones {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .botones button,
+        .botones a {
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .botones button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+        }
+
+        .botones button:hover {
+            background-color: #c0392b;
+        }
+
+        .botones a.cancelar {
+            background-color: #ecf0f1;
+            color: #2980b9;
+        }
+
+        .botones a.cancelar:hover {
+            background-color: #3498db;
+            color: white;
+            border-color: #2980b9;
+        }
+
+        .botones a.inicio {
+            background-color: #ecf0f1;
+            color: #2980b9;
+        }
+
+        .botones a.inicio:hover {
+            background-color: #3498db;
+            color: white;
+            border-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Eliminar Contacto</h1>
+        <p>¿Estás seguro de que deseas eliminar este contacto?</p>
+        <form method="post">
+            {% csrf_token %}
+            <div class="botones">
+                <button type="submit">Sí, eliminar</button>
+                <a href="{% url 'lista_contactos' %}" class="cancelar">Cancelar</a>
+                <a href="{% url 'home' %}" class="inicio">Inicio</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
