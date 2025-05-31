@@ -6,7 +6,7 @@ Este es un sistema web desarrollado en Django que implementa la estructura y dat
 
 - Python 3.10+
 - Django 5.2
-- MySQL / MariaDB
+- MySQL
 - HTML5 + CSS
 - PyCharm Community Edition 2025.1
 
@@ -22,7 +22,10 @@ Este es un sistema web desarrollado en Django que implementa la estructura y dat
 2. Instala las dependencias:
 
    ```bash
-   pip install -r requirements.txt
+   pip install mysqlclient
+   pip install django
+
+
    ```
 
 3. Crea la base de datos MySQL:
